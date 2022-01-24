@@ -231,6 +231,14 @@ namespace xEditLevelListInjection
             BipedOrType = bipedOrType;
         }
 
-        public new string ToString => $"{FormID} {BipedOrType} {Name}";
+        public new string ToString()
+        {
+            string formatbt = BipedOrType[0];
+            for(int i = 1; i < BipedOrType.Count; i++)
+            {
+                formatbt += ", " + BipedOrType[i];
+            }
+            return $"{FormID} {formatbt} {Name}";
+        }
     }
 }
