@@ -58,4 +58,4 @@ Extra details:
 The reason I did not include mteFunctions.pas or "Add Items To Leveled List.pas", was I dont know if there open source, also mteFunctions.pas has tones of useful meathods
 
 "Add Items To Leveled List.pas" also imports items into a level list but it will import all items it runs over to a selected level list. 
-  so use this for mods that have a simgle armor piece
+  so use this for mods that have a single armor piece
