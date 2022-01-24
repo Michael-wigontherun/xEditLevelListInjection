@@ -38,8 +38,7 @@ End;
 function Process(e: IInterface): integer;
 begin
   if Signature(e) <> 'ARMO' then Exit;
-  slArmo.Add(Format('%s;%s;%s;%s', [
-    BaseName(GetFile(e)),
+  slArmo.Add(Format('%s;%s;%s', [
     IntToHex(GetLoadOrderFormID(e), 8),
     GetElementEditValues(WinningOverride(e), 'FULL - Name'),
     BipedTypes(e)
