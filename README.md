@@ -22,7 +22,7 @@ Install
 Instructions
 
 - 1. Install Requirments
-- 2. Open xEdit go to mod you wish export the armor for filter. Apply Script "_ExportArmorForLevelListInjection.pas", let it finish.
+- 2. Open xEdit go to mod you wish to export the armor for filtering. Apply Script "_ExportArmorForLevelListInjection.pas", let it finish.
 - 3. Do not close xEdit or do not change load order before ready to re-run xEdit
 - 4. Run "xEditLevelListInjection.exe" to filter the list outputed by the previous script. Following the Console application's menu's
   - Menu 1, options
