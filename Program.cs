@@ -88,7 +88,7 @@ namespace xEditLevelListInjection
             Console.WriteLine("2 for no");
             if (Console.ReadLine().Equals("1"))
             {
-                File.WriteAllText(@"_ImportItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
+                File.WriteAllText($"_Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
                 Console.WriteLine($"Please move \"_Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
                 Console.WriteLine("slFormList.LoadFromFile('');");
             }
