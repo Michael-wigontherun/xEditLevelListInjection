@@ -55,7 +55,7 @@ Instructions
 Arguments:
 - first argument is always path to xEdit output file. Example: ".\xEditOutput\Armor.csv" xEditLevelListInjector is in xEditLevelListInjector folder inside xEdit folder.
 - -outputScript will Ouput the xEditScript to import list with no conformation.
-- -reimport will re-import origonal xEdit ouput after exporting the filtered list.
+- -reimport will re-import origonal xEdit output after exporting the filtered list.
 
 
 Extra details:
