@@ -6,14 +6,40 @@ using System.Text;
 
 namespace xEditLevelListInjection
 {
-    static class Program
+    static partial class Program
     {
         static StringBuilder FileOutputName = new StringBuilder();
+        static bool ReimportFile = false;
+        static bool OutputScriptNoConformation = false;
+        static string OrigonalListPath = "";
         static void Main(string[] args)
         {
             if (args.Length < 1)
             {
                 args = new string[] { @".\xEditOutput\Armor.csv" };
+            }
+            else
+            {
+                if (args.Length >= 2)
+                {
+                    for(int i = 1; i < args.Length; i++)
+                    {
+                        switch (args[i])
+                        {
+                            case "-reimport":
+                                ReimportFile = true;
+                                Console.WriteLine("-reimport argument detected. Will re-import origonal xEdit ouput after exporting the filtered list.");
+                                break;
+                            case "-outputScript":
+                                OutputScriptNoConformation = true;
+                                Console.WriteLine("-outputScript argument detected. Will Ouput the xEditScript to import list with no conformation.");
+                                break;
+                            default:
+                                Console.WriteLine($"Invalid console argument: {args[i]}");
+                                break;
+                        }
+                    }
+                }
             }
             List<ItemForm> itemList = new List<ItemForm>();
             itemList = tryGetOutputList(args[0]);
@@ -23,7 +49,10 @@ namespace xEditLevelListInjection
             {
                 do
                 {
+                    Console.WriteLine("\n\n\n\n\n\n\n");
+                    Console.WriteLine($"Current filter line: {FileOutputName}");
                     Console.WriteLine("Input number of operation. Then press enter");
+                    Console.WriteLine("\n");
                     Console.WriteLine("1 to filter for keyword.");
                     Console.WriteLine("2 to exclude keyword.");
                     Console.WriteLine("3 to output list for import");
@@ -39,10 +68,10 @@ namespace xEditLevelListInjection
                             itemList = Filter(itemList, false);
                             break;
                         case "3":
-                            OutputList(itemList);
+                            itemList = OutputList(itemList);
                             break;
                         case "4":
-                            itemList = tryGetOutputList(args[0]);
+                            itemList = tryGetOutputList(OrigonalListPath);
                             break;
                         case "5":
                             outputListToConsole(itemList);
@@ -63,15 +92,7 @@ namespace xEditLevelListInjection
             }
         }
 
-        static void outputListToConsole(List<ItemForm> itemList)
-        {
-            foreach(ItemForm itemForm in itemList)
-            {
-                Console.WriteLine(itemForm.ToString());
-            }
-        }
-
-        static void OutputList(List<ItemForm> itemList)
+        static List<ItemForm> OutputList(List<ItemForm> itemList)
         {
             FileOutputName = FileOutputName.Replace(" ", "");
             List<string> FormIDList = new List<string>();
@@ -85,22 +106,35 @@ namespace xEditLevelListInjection
             //@".\xEditOutput\Armor.csv"
             string fileFullPath = Path.GetFullPath(filePath);
             Console.WriteLine($"Output form list to \"{fileFullPath}\"");
-
-            Console.WriteLine($"Do you want to export a new xEdit script \"_Import{FileOutputName}ItemsToLevelList.pas\"");
-            Console.WriteLine("1 for yes.");
-            Console.WriteLine("2 for no");
-            if (Console.ReadLine().Equals("1"))
+            if(OutputScriptNoConformation == false)
+            { 
+                Console.WriteLine($"Do you want to export a new xEdit script \"_Import{FileOutputName}ItemsToLevelList.pas\"");
+                Console.WriteLine("1 for yes.");
+                Console.WriteLine("2 for no");
+                if (Console.ReadLine().Equals("1"))
+                {
+                    File.WriteAllText($"_Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
+                    Console.WriteLine($"Please move \"_Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
+                    Console.WriteLine("slFormList.LoadFromFile('');");
+                }
+                else
+                {
+                    Console.WriteLine("You will need to manually change line 12 of \"_ImportItemsToLevelList.pas\" to");
+                    Console.WriteLine("slFormList.LoadFromFile('{Absolute File path with extention}');");
+                    Console.WriteLine("Without {} surrounding it");
+                }
+            }
+            else
             {
                 File.WriteAllText($"_Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
                 Console.WriteLine($"Please move \"_Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
                 Console.WriteLine("slFormList.LoadFromFile('');");
             }
-            else
+            if(ReimportFile == true)
             {
-                Console.WriteLine("You will need to manually change line 12 of \"_ImportItemsToLevelList.pas\" to");
-                Console.WriteLine("slFormList.LoadFromFile('{Absolute File path with extention}');");
-                Console.WriteLine("Without {} surrounding it");
+                return tryGetOutputList(OrigonalListPath);
             }
+            return itemList;
         }
 
         static string BuildxEditImportScript(string absoluteListFilePath)
@@ -187,6 +221,8 @@ namespace xEditLevelListInjection
             try
             {
                 itemList = GetOutputList(filePath);
+                OrigonalListPath = filePath;
+                FileOutputName = new StringBuilder();
                 return itemList;
             }
             catch (FileNotFoundException)
@@ -221,27 +257,7 @@ namespace xEditLevelListInjection
 
     }
 
-    public class ItemForm
-    {
-        public string FormID { get; set; }
-        public string Name { get; set; }
-        public List<string> BipedOrType { get; set; }
+    
 
-        public ItemForm(string formID, string name, List<string> bipedOrType)
-        {
-            FormID = formID;
-            Name = name;
-            BipedOrType = bipedOrType;
-        }
-
-        public new string ToString()
-        {
-            string formatbt = BipedOrType[0];
-            for(int i = 1; i < BipedOrType.Count; i++)
-            {
-                formatbt += ", " + BipedOrType[i];
-            }
-            return $"{FormID} {formatbt} {Name}";
-        }
-    }
+    
 }
