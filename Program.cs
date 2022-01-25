@@ -62,15 +62,18 @@ namespace xEditLevelListInjection
                 Console.ReadLine();
             }
         }
+
         static void outputListToConsole(List<ItemForm> itemList)
         {
             foreach(ItemForm itemForm in itemList)
             {
-                Console.WriteLine(itemForm.ToString);
+                Console.WriteLine(itemForm.ToString());
             }
         }
+
         static void OutputList(List<ItemForm> itemList)
         {
+            FileOutputName = FileOutputName.Replace(" ", "");
             List<string> FormIDList = new List<string>();
             string filePath = $".\\xEditLevelListInjectorOuput\\{FileOutputName}.txt";
             foreach (ItemForm itemForm in itemList)
@@ -103,7 +106,7 @@ namespace xEditLevelListInjection
         static string BuildxEditImportScript(string absoluteListFilePath)
         {
             StringBuilder ImportScript = new StringBuilder();
-            ImportScript.Append("unit _ImportItemsToLevelList;");
+            ImportScript.Append($"unit _Import{FileOutputName}ItemsToLevelList;");
             ImportScript.AppendLine("");
             ImportScript.AppendLine("interface");
             ImportScript.AppendLine("  implementation");
@@ -149,7 +152,7 @@ namespace xEditLevelListInjection
                 {
                     foreach (string bt in itemForm.BipedOrType)
                     {
-                        if (bt.ToLower().Contains(filter) == include)
+                        if (bt.ToLower().Contains(filter.ToLower()) == include)
                         {
                             newList.Add(itemForm);
                         }
@@ -162,7 +165,7 @@ namespace xEditLevelListInjection
                 Console.WriteLine("Filtering by Name.");
                 foreach (ItemForm itemForm in itemList)
                 {
-                    if (itemForm.Name.ToLower().Contains(filter) == include)
+                    if (itemForm.Name.ToLower().Contains(filter.ToLower()) == include)
                     {
                         newList.Add(itemForm);
                     }
