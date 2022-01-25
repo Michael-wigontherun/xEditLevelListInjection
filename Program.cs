@@ -11,6 +11,7 @@ namespace xEditLevelListInjection
         static StringBuilder FileOutputName = new StringBuilder();
         static bool ReimportFile = false;
         static bool OutputScriptNoConformation = false;
+        static bool OneFilter = false;
         static string OrigonalListPath = "";
         static void Main(string[] args)
         {
@@ -33,6 +34,10 @@ namespace xEditLevelListInjection
                             case "-outputScript":
                                 OutputScriptNoConformation = true;
                                 Console.WriteLine("-outputScript argument detected. Will Ouput the xEditScript to import list with no conformation.");
+                                break;
+                            case "-1filter":
+                                OneFilter = true;
+                                Console.WriteLine("-1filter argument detected. Will Output xEdit Import list after one filter");
                                 break;
                             default:
                                 Console.WriteLine($"Invalid console argument: {args[i]}");
@@ -92,6 +97,59 @@ namespace xEditLevelListInjection
             }
         }
 
+        static List<ItemForm> Filter(List<ItemForm> itemList, bool include)
+        {
+            Console.WriteLine("Input number of operation. Then press enter.");
+            Console.WriteLine("1 to filter for Name.");
+            Console.WriteLine("2 to filter for biped or item type.");
+            string operationType = Console.ReadLine();
+
+            Console.WriteLine("Input filter for inclusion. Then press enter.");
+            string filter = Console.ReadLine();
+
+            FileOutputName.Append(filter);
+            List<ItemForm> newList = new List<ItemForm>();
+            if (operationType.Equals("2"))
+            {
+                Console.WriteLine("Filtering by Beped or item type.");
+                foreach (ItemForm itemForm in itemList)
+                {
+                    foreach (string bt in itemForm.BipedOrType)
+                    {
+                        if (bt.ToLower().Contains(filter.ToLower()) == include)
+                        {
+                            newList.Add(itemForm);
+                        }
+                    }
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("Filtering by Name.");
+                foreach (ItemForm itemForm in itemList)
+                {
+                    if (itemForm.Name.ToLower().Contains(filter.ToLower()) == include)
+                    {
+                        newList.Add(itemForm);
+                    }
+                }
+            }
+
+            if (newList.Count < 1 || newList.Count == itemList.Count)
+            {
+                Console.WriteLine("No forms added or removed. Returning to previous step.");
+                return itemList;
+            }
+
+            if (OneFilter == true)
+            {
+                return OutputList(itemList);
+            }
+
+            return newList;
+        }
+
         static List<ItemForm> OutputList(List<ItemForm> itemList)
         {
             FileOutputName = FileOutputName.Replace(" ", "");
@@ -135,84 +193,6 @@ namespace xEditLevelListInjection
                 return tryGetOutputList(OrigonalListPath);
             }
             return itemList;
-        }
-
-        static string BuildxEditImportScript(string absoluteListFilePath)
-        {
-            StringBuilder ImportScript = new StringBuilder();
-            ImportScript.Append($"unit _Import{FileOutputName}ItemsToLevelList;");
-            ImportScript.AppendLine("");
-            ImportScript.AppendLine("interface");
-            ImportScript.AppendLine("  implementation");
-            ImportScript.AppendLine("    uses xEditAPI, 'Add Items To Leveled List', mteFunctions, Classes, SysUtils, StrUtils, Windows;");
-            ImportScript.AppendLine("var  ");
-            ImportScript.AppendLine("    slFormList: TStringList;");
-            ImportScript.AppendLine("");
-            ImportScript.AppendLine("function Initialize: integer;");
-            ImportScript.AppendLine("begin ");
-            ImportScript.AppendLine("  slFormList := TStringList.create;");
-            ImportScript.AppendLine(String.Format("  slFormList.LoadFromFile('{0}');", absoluteListFilePath).ToString());
-            ImportScript.AppendLine("end;");
-            ImportScript.AppendLine("");
-            ImportScript.AppendLine("function Process(e: IInterface): integer;");
-            ImportScript.AppendLine("begin ");
-            ImportScript.AppendLine("  CreateTransferFormList(e);");
-            ImportScript.AppendLine("end;");
-            ImportScript.AppendLine("");
-            ImportScript.AppendLine("function Finalize: integer;");
-            ImportScript.AppendLine("begin ");
-            ImportScript.AppendLine("end;");
-            ImportScript.AppendLine("end.");
-
-            return ImportScript.ToString();
-        }
-
-        static List<ItemForm> Filter(List<ItemForm> itemList, bool include)
-        {
-            Console.WriteLine("Input number of operation. Then press enter.");
-            Console.WriteLine("1 to filter for Name.");
-            Console.WriteLine("2 to filter for biped or item type.");
-            string operationType = Console.ReadLine();
-
-            Console.WriteLine("Input filter for inclusion. Then press enter.");
-            string filter = Console.ReadLine();
-
-            FileOutputName.Append(filter);
-            List<ItemForm> newList = new List<ItemForm>();
-            if (operationType.Equals("2"))
-            {
-                Console.WriteLine("Filtering by Beped or item type.");
-                foreach (ItemForm itemForm in itemList)
-                {
-                    foreach (string bt in itemForm.BipedOrType)
-                    {
-                        if (bt.ToLower().Contains(filter.ToLower()) == include)
-                        {
-                            newList.Add(itemForm);
-                        }
-                    }
-                    
-                }
-            }
-            else
-            {
-                Console.WriteLine("Filtering by Name.");
-                foreach (ItemForm itemForm in itemList)
-                {
-                    if (itemForm.Name.ToLower().Contains(filter.ToLower()) == include)
-                    {
-                        newList.Add(itemForm);
-                    }
-                }
-            }
-
-            if (newList.Count < 1 || newList.Count == itemList.Count)
-            {
-                Console.WriteLine("No forms added or removed. Returning to previous step.");
-                return itemList;
-            }
-
-            return newList;
         }
 
         static List<ItemForm> tryGetOutputList(string filePath)
