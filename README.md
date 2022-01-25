@@ -11,7 +11,7 @@ Requires
     
   - Add Items To Leveled List.pas 
     - https://gist.github.com/matortheeternal/91e77ef306242137184dcfc1b9631669
-    - download in the top right
+    - download in the top right of page
     
   - .Net 3.1 Core runtime or desktop runtime
     - https://dotnet.microsoft.com/en-us/download/dotnet/3.1
