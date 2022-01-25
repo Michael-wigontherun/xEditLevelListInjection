@@ -1,23 +1,23 @@
 # xEditLevelListInjection
 
 Requires 
-  SSEEdit
-    https://www.nexusmods.com/skyrimspecialedition/mods/164
-    Might work with Fallout 4 xEdit
+  - SSEEdit
+    - https://www.nexusmods.com/skyrimspecialedition/mods/164
+    - Might work with Fallout 4 xEdit
     
-  mteFunctions.pas
-    https://github.com/matortheeternal/TES5EditScripts 
-    download full package or just mteFunctions.pas
+  - mteFunctions.pas
+    - https://github.com/matortheeternal/TES5EditScripts 
+    - download full package or just mteFunctions.pas
     
-  Add Items To Leveled List.pas 
-    https://gist.github.com/matortheeternal/91e77ef306242137184dcfc1b9631669
-    download in the top right
+  - Add Items To Leveled List.pas 
+    - https://gist.github.com/matortheeternal/91e77ef306242137184dcfc1b9631669
+    - download in the top right
     
-  .Net 3.1 Core runtime or desktop runtime
-    https://dotnet.microsoft.com/en-us/download/dotnet/3.1
+  - .Net 3.1 Core runtime or desktop runtime
+    - https://dotnet.microsoft.com/en-us/download/dotnet/3.1
 
 Install
-  Drag and drop release package into xEdit folder, SSEEdit works unsure about Fallout 4
+  - Drag and drop release package into xEdit folder, SSEEdit works unsure about Fallout 4
 
 Instructions
 
@@ -52,10 +52,15 @@ Instructions
   - Important Note: Running this on multiple level list will result in importing the list into the first one it xEdit grabs
 - 6. Verify correct import and delete items from level list you missed when filtering
 
+Arguments:
+- first argument is always path to xEdit output file. Example: ".\xEditOutput\Armor.csv" xEditLevelListInjector is in xEditLevelListInjector folder inside xEdit folder.
+- -outputScript will Ouput the xEditScript to import list with no conformation.
+- -reimport will re-import origonal xEdit output after exporting the filtered list.
+
 
 Extra details:
 
-The reason I did not include mteFunctions.pas or "Add Items To Leveled List.pas", was I dont know if there open source, also mteFunctions.pas has tones of useful meathods
+- The reason I did not include mteFunctions.pas or "Add Items To Leveled List.pas", was I dont know if there open source, also mteFunctions.pas has tones of useful meathods
 
-"Add Items To Leveled List.pas" also imports items into a level list but it will import all items it runs over to a selected level list. 
+- "Add Items To Leveled List.pas" also imports items into a level list but it will import all items it runs over to a selected level list. 
   so use this for mods that have a single armor set
