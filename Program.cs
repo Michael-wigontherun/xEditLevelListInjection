@@ -144,7 +144,7 @@ namespace xEditLevelListInjection
 
             if (OneFilter == true)
             {
-                return OutputList(itemList);
+                return OutputList(newList);
             }
 
             return newList;
