@@ -52,6 +52,11 @@ Instructions
   - Important Note: Running this on multiple level list will result in importing the list into the first one it xEdit grabs
 - 6. Verify correct import and delete items from level list you missed when filtering
 
+Arguments:
+- first argument is always path to xEdit output file. Example: ".\xEditOutput\Armor.csv" xEditLevelListInjector is in xEditLevelListInjector folder inside xEdit folder.
+- -outputScript will Ouput the xEditScript to import list with no conformation.
+- -reimport will re-import origonal xEdit ouput after exporting the filtered list.
+
 
 Extra details:
 
