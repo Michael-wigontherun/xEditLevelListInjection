@@ -1,1 +1,1 @@
-start xEditLevelListInjection.exe ".\xEditOutput\Armor.csv" -outputScript -reimport
+start xEditLevelListInjection.exe ".\xEditOutput\Armor.csv"
