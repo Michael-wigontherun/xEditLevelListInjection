@@ -13,6 +13,7 @@ namespace xEditLevelListInjection
         static bool OutputScriptNoConformation = false;
         static bool OneFilter = false;
         static string OrigonalListPath = "";
+
         static void Main(string[] args)
         {
             if (args.Length < 1)
@@ -47,7 +48,7 @@ namespace xEditLevelListInjection
                 }
             }
             List<ItemForm> itemList = new List<ItemForm>();
-            itemList = tryGetOutputList(args[0]);
+            itemList = TryGetOutputList(args[0]);
 
             bool close = false;
             try
@@ -62,8 +63,9 @@ namespace xEditLevelListInjection
                     Console.WriteLine("2 to exclude keyword.");
                     Console.WriteLine("3 to output list for import");
                     Console.WriteLine("4 to re-get origonal list. This clears your current list.");
-                    Console.WriteLine("5 to list in console");
-                    Console.WriteLine("6 to close.");
+                    Console.WriteLine("5 to get different list. This clears your current list.");
+                    Console.WriteLine("6 to list in console");
+                    Console.WriteLine("7 to close.");
                     switch (Console.ReadLine())
                     {
                         case "1":
@@ -76,12 +78,16 @@ namespace xEditLevelListInjection
                             itemList = OutputList(itemList);
                             break;
                         case "4":
-                            itemList = tryGetOutputList(OrigonalListPath);
+                            itemList = TryGetOutputList(OrigonalListPath);
                             break;
                         case "5":
-                            outputListToConsole(itemList);
+                            Console.WriteLine("Enter different xEdit exported list absolute path with file name and extension.");
+                            itemList = TryGetOutputList(Console.ReadLine());
                             break;
                         case "6":
+                            outputListToConsole(itemList);
+                            break;
+                        case "7":
                             close = true;
                             break;
                         default:
@@ -97,6 +103,7 @@ namespace xEditLevelListInjection
             }
         }
 
+        //-----------------------------------------------------------------------------------------------
         static List<ItemForm> Filter(List<ItemForm> itemList, bool include)
         {
             Console.WriteLine("Input number of operation. Then press enter.");
@@ -150,6 +157,7 @@ namespace xEditLevelListInjection
             return newList;
         }
 
+        //-----------------------------------------------------------------------------------------------
         static List<ItemForm> OutputList(List<ItemForm> itemList)
         {
             FileOutputName = FileOutputName.Replace(" ", "");
@@ -166,36 +174,37 @@ namespace xEditLevelListInjection
             Console.WriteLine($"Output form list to \"{fileFullPath}\"");
             if(OutputScriptNoConformation == false)
             { 
-                Console.WriteLine($"Do you want to export a new xEdit script \"_Import{FileOutputName}ItemsToLevelList.pas\"");
+                Console.WriteLine($"Do you want to export a new xEdit script \"____Import{FileOutputName}ItemsToLevelList.pas\"");
                 Console.WriteLine("1 for yes.");
                 Console.WriteLine("2 for no");
                 if (Console.ReadLine().Equals("1"))
                 {
-                    File.WriteAllText($"_Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
-                    Console.WriteLine($"Please move \"_Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
+                    File.WriteAllText($"____Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
+                    Console.WriteLine($"Please move \"____Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
                     Console.WriteLine("slFormList.LoadFromFile('');");
                 }
                 else
                 {
-                    Console.WriteLine("You will need to manually change line 12 of \"_ImportItemsToLevelList.pas\" to");
+                    Console.WriteLine("You will need to manually change line 12 of \"____ImportItemsToLevelList.pas\" to");
                     Console.WriteLine("slFormList.LoadFromFile('{Absolute File path with extention}');");
                     Console.WriteLine("Without {} surrounding it");
                 }
             }
             else
             {
-                File.WriteAllText($"_Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
-                Console.WriteLine($"Please move \"_Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
+                File.WriteAllText($"____Import{FileOutputName}ItemsToLevelList.pas", BuildxEditImportScript(fileFullPath));
+                Console.WriteLine($"Please move \"____Import{FileOutputName}ItemsToLevelList.pas\" to inside your Edit Scripts folder with the file path to the absolute file path to the outputed list located on line 12 or contained inside of:");
                 Console.WriteLine("slFormList.LoadFromFile('');");
             }
             if(ReimportFile == true)
             {
-                return tryGetOutputList(OrigonalListPath);
+                return TryGetOutputList(OrigonalListPath);
             }
             return itemList;
         }
 
-        static List<ItemForm> tryGetOutputList(string filePath)
+        //-----------------------------------------------------------------------------------------------
+        static List<ItemForm> TryGetOutputList(string filePath)
         {
             List<ItemForm> itemList = new List<ItemForm>();
             try
@@ -210,7 +219,7 @@ namespace xEditLevelListInjection
                 Console.WriteLine("Could not find xEdit output file.");
                 Console.WriteLine("Input absolute path of xEdit output file with header row: \"FormID;Name;BipedOrType\"");
                 filePath = Console.ReadLine();
-                return tryGetOutputList(filePath);
+                return TryGetOutputList(filePath);
             }
         }
 
@@ -226,6 +235,7 @@ namespace xEditLevelListInjection
                 {
                     throw new FileNotFoundException();
                 }
+                Console.Title = Path.GetFileName(filePath);
                 while (!reader.EndOfStream)
                 {
                     stringArr = reader.ReadLine().Split(';');

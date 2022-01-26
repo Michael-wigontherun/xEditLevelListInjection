@@ -30,8 +30,9 @@ Instructions
     - 2 filters for keyword exclusion and returns the list with out forms matching the keyword, you can run this multiple times to remove more and more forms from list
     - 3 outputs the list you have filtered to new file using the list you crafted from including and excluding filters
     - 4 re-imports the origonal outputed list from xEdit
-    - 5 writes current list to console format writen, FormID, Biped or Type, Name of item
-    - 6 closes the progam
+	- 5 get different list. This will ask to input the absolute path to one of the different outputed files
+    - 6 writes current list to console format writen, FormID, Biped or Type, Name of item
+    - 7 closes the progam
   - Menu 2, from options 1 and 2 from Menu 1, they both use the same menu
     - 1 filters by Name of item, then asks you for the keyword
     - 2 filters from biped or item type, then asks you for the keyword
@@ -57,6 +58,10 @@ Arguments:
 - -outputScript will Ouput the xEditScript to import list with no conformation.
 - -reimport will re-import origonal xEdit output after exporting the filtered list.
 
+	Note: the first argument can be changed to get any of the 3 to start: 
+	- LevelList.csv is for outputed level lists
+	- Weapons.csv is for outputed weapons
+	- Armor.csv is for outputed armor
 
 Extra details:
 

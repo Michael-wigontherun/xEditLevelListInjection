@@ -1,4 +1,4 @@
-unit _ExportArmorForLevelListInjection;
+unit ___ExportLevelListsForLevelListInjection;
 
 interface
   implementation
@@ -12,36 +12,13 @@ begin
   slArmo.Add('FormID;Name;BipedOrType');
 end;
 
-function BipedTypes(e: IInterface) : string;
-var 
-  i : integer;
-  BipedList : string;
-begin
-  if ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) = 1 then begin
-    Result := BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), 0));
-    Exit;
-  end;
-
-  if ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) > 1 then begin
-    BipedList := BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), 0));
-    for i := 1 to ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) - 1 do
-    begin
-      BipedList := BipedList + ',' + BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), i));
-    end;
-    Result := BipedList;
-    Exit;
-  end;
-
-  Result := 'Invis';
-End;
-
 function Process(e: IInterface): integer;
 begin
-  if Signature(e) <> 'ARMO' then Exit;
+  if Signature(e) <> 'LVLI' then Exit;
   slArmo.Add(Format('%s;%s;%s', [
     IntToHex(GetLoadOrderFormID(e), 8),
-    GetElementEditValues(WinningOverride(e), 'FULL - Name'),
-    BipedTypes(e)
+    GetElementEditValues(spell, 'EDID - Editor ID'),
+    'Level List'
   ]));
 end;
 
@@ -69,7 +46,7 @@ begin
   if not Assigned(slArmo) then
     Exit;
   if (slArmo.Count > 1) then begin
-      slArmo.SaveToFile(ProgramPath+'xEditLevelListInjector\xEditOutput\Armor.csv');
+      slArmo.SaveToFile(ProgramPath+'xEditLevelListInjector\xEditOutput\LevelLists.csv');
   end;
 
   slArmo.Free;

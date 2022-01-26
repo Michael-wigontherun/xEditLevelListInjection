@@ -17,7 +17,7 @@ namespace xEditLevelListInjection
         static string BuildxEditImportScript(string absoluteListFilePath)
         {
             StringBuilder ImportScript = new StringBuilder();
-            ImportScript.Append($"unit _Import{FileOutputName}ItemsToLevelList;");
+            ImportScript.Append($"unit ____Import{FileOutputName}ItemsToLevelList;");
             ImportScript.AppendLine("");
             ImportScript.AppendLine("interface");
             ImportScript.AppendLine("  implementation");
