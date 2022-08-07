@@ -13,6 +13,7 @@ namespace xEditLevelListInjection
         static bool OutputScriptNoConformation = false;
         static bool OneFilter = false;
         static string OrigonalListPath = "";
+        static string TitleExtention = " ";
 
         static void Main(string[] args)
         {
@@ -30,14 +31,17 @@ namespace xEditLevelListInjection
                         {
                             case "-reimport":
                                 ReimportFile = true;
+                                TitleExtention += "-reimport";
                                 Console.WriteLine("-reimport argument detected. Will re-import origonal xEdit ouput after exporting the filtered list.");
                                 break;
                             case "-outputScript":
                                 OutputScriptNoConformation = true;
+                                TitleExtention += "-outputScript";
                                 Console.WriteLine("-outputScript argument detected. Will Ouput the xEditScript to import list with no conformation.");
                                 break;
                             case "-1filter":
                                 OneFilter = true;
+                                TitleExtention += "-1filter";
                                 Console.WriteLine("-1filter argument detected. Will Output xEdit Import list after one filter");
                                 break;
                             default:
@@ -116,7 +120,18 @@ namespace xEditLevelListInjection
 
             FileOutputName.Append(filter);
             List<ItemForm> newList = new List<ItemForm>();
-            if (operationType.Equals("2"))
+            if (operationType.Equals("1"))
+            {
+                Console.WriteLine("Filtering by Name.");
+                foreach (ItemForm itemForm in itemList)
+                {
+                    if (itemForm.Name.ToLower().Contains(filter.ToLower()) == include)
+                    {
+                        newList.Add(itemForm);
+                    }
+                }
+            }
+            else if (operationType.Equals("2"))
             {
                 Console.WriteLine("Filtering by Beped or item type.");
                 foreach (ItemForm itemForm in itemList)
@@ -129,17 +144,6 @@ namespace xEditLevelListInjection
                         }
                     }
 
-                }
-            }
-            else
-            {
-                Console.WriteLine("Filtering by Name.");
-                foreach (ItemForm itemForm in itemList)
-                {
-                    if (itemForm.Name.ToLower().Contains(filter.ToLower()) == include)
-                    {
-                        newList.Add(itemForm);
-                    }
                 }
             }
 
@@ -235,7 +239,7 @@ namespace xEditLevelListInjection
                 {
                     throw new FileNotFoundException();
                 }
-                Console.Title = Path.GetFileName(filePath);
+                Console.Title = Path.GetFileName(filePath) + TitleExtention;
                 while (!reader.EndOfStream)
                 {
                     stringArr = reader.ReadLine().Split(';');

@@ -17,7 +17,7 @@ begin
   if Signature(e) <> 'LVLI' then Exit;
   slArmo.Add(Format('%s;%s;%s', [
     IntToHex(GetLoadOrderFormID(e), 8),
-    GetElementEditValues(spell, 'EDID - Editor ID'),
+    GetElementEditValues(e, 'EDID - Editor ID'),
     'Level List'
   ]));
 end;

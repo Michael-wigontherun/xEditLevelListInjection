@@ -18,20 +18,22 @@ var
   BipedList : string;
 begin
   if ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) = 1 then begin
-    Result := BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), 0));
+    Result := GetElementEditValues(e, 'BOD2 - Biped Body Template\Armor Type') + ',' + BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), 0));
     Exit;
   end;
 
   if ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) > 1 then begin
-    BipedList := BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), 0));
-    for i := 1 to ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) - 1 do
+    BipedList := GetElementEditValues(e, 'BOD2 - Biped Body Template\Armor Type');
+    for i := 0 to ElementCount(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags')) - 1 do
     begin
       BipedList := BipedList + ',' + BaseName(ElementByIndex(ElementByPath(e, 'BOD2 - Biped Body Template\First Person Flags'), i));
     end;
     Result := BipedList;
     Exit;
   end;
-
+  
+  BipedList := BipedList + ',' + GetElementEditValues(e, 'BOD2 - Biped Body Template\Armor Type');
+  
   Result := 'Invis';
 End;
 
